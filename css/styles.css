@@ -1,0 +1,178 @@
+#personal-info {
+  background-color: #331E36;
+  color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+#personal-info .personal-content {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+@media (max-width: 768px) {
+  #personal-info .personal-content {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+#personal-info .profile-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+#personal-info .personal-text {
+  flex: 1;
+}
+#personal-info .personal-text h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+#personal-info .personal-text h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #C2EFEB;
+}
+#personal-info .personal-text .email {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+#personal-info .personal-text .bio {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+#skills {
+  background-color: #6EA4BF;
+  color: white;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+#skills .skills-content h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
+#skills .skills-content .skills-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  #skills .skills-content .skills-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+  }
+}
+#skills .skills-content .skills-column h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #ECFEE8;
+  font-weight: 500;
+}
+#skills .skills-content .skills-column .skills-list {
+  list-style: none;
+  padding: 0;
+}
+#skills .skills-content .skills-column .skills-list li {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  border-left: 4px solid #C2EFEB;
+}
+#skills .skills-content .skills-column .skills-list li:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+#perfil-profesional {
+  background-color: #C2EFEB;
+  color: #331E36;
+  padding: 3rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+#perfil-profesional .teaser-content {
+  text-align: center;
+}
+#perfil-profesional .teaser-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #41337A;
+  font-weight: 600;
+}
+#perfil-profesional .teaser-content .teaser-text {
+  max-width: 800px;
+  margin: 0 auto;
+}
+#perfil-profesional .teaser-content .teaser-text p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #331E36;
+  font-weight: 500;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  background-color: #ECFEE8;
+  color: #333;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  background: linear-gradient(135deg, #41337A, #331E36);
+  color: white;
+  text-align: center;
+  padding: 2rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+.header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+.header .tagline {
+  font-size: 1.2rem;
+  opacity: 0.9;
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .main-container {
+    padding: 3rem 2rem;
+    gap: 3rem;
+  }
+}
+
+/*# sourceMappingURL=styles.css.map */

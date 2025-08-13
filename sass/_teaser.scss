@@ -1,0 +1,32 @@
+@use './variables';
+
+#perfil-profesional {
+  background-color: variables.$teaser-color;
+  color: variables.$color-dark-purple;
+  padding: variables.$section-padding;
+  border-radius: variables.$border-radius;
+  box-shadow: variables.$box-shadow;
+  
+  .teaser-content {
+    text-align: center;
+    
+    h2 {
+      font-size: variables.$font-size-h2;
+      margin-bottom: 1.5rem;
+      color: variables.$color-tekhelet;
+      font-weight: 600;
+    }
+    
+    .teaser-text {
+      max-width: 800px;
+      margin: 0 auto;
+      
+      p {
+        font-size: variables.$font-size-base;
+        line-height: 1.8;
+        color: variables.$color-dark-purple;
+        font-weight: 500;
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+@use './variables';
+
+#skills {
+  background-color: variables.$skills-color;
+  color: white;
+  padding: variables.$section-padding;
+  border-radius: variables.$border-radius;
+  box-shadow: variables.$box-shadow;
+  
+  .skills-content {
+    h2 {
+      font-size: variables.$font-size-h2;
+      margin-bottom: 2rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      
+      @media (min-width: 768px) {
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+      }
+    }
+    
+    .skills-column {
+      h3 {
+        font-size: variables.$font-size-h3;
+        margin-bottom: 1rem;
+        color: variables.$color-honeydew;
+        font-weight: 500;
+      }
+      
+      .skills-list {
+        list-style: none;
+        padding: 0;
+        
+        li {
+          background: rgba(255, 255, 255, 0.1);
+          padding: 0.8rem 1.2rem;
+          margin-bottom: 0.5rem;
+          border-radius: 8px;
+          font-size: variables.$font-size-base;
+          transition: all 0.3s ease;
+          border-left: 4px solid variables.$color-mint;
+          
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+          }
+        }
+      }
+    }
+  }
+}

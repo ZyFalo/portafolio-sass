@@ -1,0 +1,30 @@
+// 🎨 Paleta de colores
+$color-dark-purple: #331E36;   // Dark purple
+$color-tekhelet:    #41337A;   // Tekhelet
+$color-blue:        #6EA4BF;   // Air superiority blue
+$color-mint:        #C2EFEB;   // Mint green
+$color-honeydew:    #ECFEE8;   // Honeydew
+
+// 🎯 Colores principales por sección
+$personal-color: $color-dark-purple;
+$skills-color:   $color-blue;
+$teaser-color:   $color-mint;
+
+// 🎏 Tamaños de imagen de perfil
+$profile-img-size-lg: 200px;
+$profile-img-size-md: 120px;
+$profile-img-size-sm: 64px;
+
+// 📐 Espaciado y medidas
+$container-max-width: 1200px;
+$section-padding: 3rem;
+$border-radius: 12px;
+$box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+// 🔤 Tipografía
+$font-family-primary: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+$font-size-h1: 2.5rem;
+$font-size-h2: 2rem;
+$font-size-h3: 1.5rem;
+$font-size-base: 1.1rem;
+

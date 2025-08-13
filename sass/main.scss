@@ -1,0 +1,59 @@
+@use './variables';
+@use './personal';
+@use './skills';
+@use './teaser';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: variables.$font-family-primary;
+  font-size: variables.$font-size-base;
+  line-height: 1.6;
+  background-color: variables.$color-honeydew;
+  color: #333;
+}
+
+.container {
+  max-width: variables.$container-max-width;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.header {
+  background: linear-gradient(135deg, variables.$color-tekhelet, variables.$color-dark-purple);
+  color: white;
+  text-align: center;
+  padding: 2rem 0;
+  box-shadow: variables.$box-shadow;
+  
+  h1 {
+    font-size: variables.$font-size-h1;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+  }
+  
+  .tagline {
+    font-size: 1.2rem;
+    opacity: 0.9;
+  }
+}
+
+.main-container {
+  max-width: variables.$container-max-width;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  gap: 2rem;
+  
+  @media (min-width: 768px) {
+    padding: 3rem 2rem;
+    gap: 3rem;
+  }
+}
+
+
+
