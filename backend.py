@@ -1,5 +1,9 @@
 """
-🚀 Backend FastAPI para validación de reCAPTCHA
+🚀 Backend FastAPI para validació# 🔑 Configuración de reCAPTCHA para Railway
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
+RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"e r# 🔑 Configuración de reCAPTCHA
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
+RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"PTCHA
 Autor: Sistema de validación
 Fecha: Agosto 2025
 """
@@ -20,17 +24,10 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# 🌐 Configurar CORS para permitir peticiones desde el frontend
+# 🌐 Configurar CORS para Railway
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:8080", 
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8080",
-        "https://*.railway.app",
-        "https://*.up.railway.app"
-    ],  # Dominios permitidos para desarrollo y Railway
+    allow_origins=["*"],  # Railway maneja los dominios dinámicamente
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
@@ -61,6 +58,11 @@ class RecaptchaResponse(BaseModel):
 async def root():
     """🏠 Página principal - Redirige al formulario de registro"""
     return FileResponse('sign_up.html')
+
+@app.get("/health")
+async def health_check():
+    """💚 Health check para Railway"""
+    return {"status": "healthy", "service": "portfolio-api"}
 
 @app.get("/sign_up.html")
 async def signup_page():
@@ -196,19 +198,17 @@ async def test_recaptcha():
 if __name__ == "__main__":
     import uvicorn
     
-    # 🌐 Obtener puerto de Railway o usar 8000 por defecto
+    # 🌐 Puerto de Railway (asignado dinámicamente)
     port = int(os.environ.get("PORT", 8000))
     
-    print("🚀 Iniciando servidor FastAPI...")
-    print(f"📍 Puerto: {port}")
-    print("📚 Documentación disponible en: /docs")
-    print("🔄 Modo de producción")
+    print(f"🚀 Iniciando en puerto {port}")
     
-    # 🏃‍♂️ Ejecutar servidor
+    # 🏃‍♂️ Ejecutar servidor optimizado para Railway
     uvicorn.run(
         "backend:app",
         host="0.0.0.0",
         port=port,
-        reload=False,  # Sin recarga en producción
-        log_level="info"
+        reload=False,
+        log_level="info",
+        access_log=True
     )

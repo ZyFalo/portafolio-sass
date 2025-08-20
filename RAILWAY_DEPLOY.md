@@ -1,118 +1,126 @@
-# 🚂 Desplegar en Railway - Instrucciones
+# 🚀 Guía de Despliegue en Railway
 
-## 📋 Preparación del proyecto
+## 📋 Pasos para desplegar en Railway
 
-✅ **El proyecto ya está configurado para Railway** con los siguientes archivos:
+### 1. 🔧 Preparación del proyecto
+El proyecto ya está dockerizado y listo para Railway con:
+- ✅ `Dockerfile` optimizado
+- ✅ `.dockerignore` configurado  
+- ✅ `railway.toml` para configuración
+- ✅ `requirements.txt` actualizado
 
-- `Procfile` - Comando de inicio para Railway
-- `requirements.txt` - Dependencias de Python
-- `railway.json` - Configuración específica de Railway
-- `runtime.txt` - Versión de Python
-- `.gitignore` - Archivos a ignorar en Git
+### 2. 🌐 Crear cuenta en Railway
+1. Ve a [railway.app](https://railway.app)
+2. Regístrate con GitHub/Google/Email
+3. Verifica tu cuenta
 
-## 🚀 Pasos para desplegar en Railway
+### 3. 📁 Conectar repositorio
+**Opción A: Desde GitHub**
+1. Sube tu código a GitHub
+2. En Railway: "Deploy from GitHub repo"
+3. Selecciona tu repositorio
 
-### 1. **Subir a GitHub**
+**Opción B: Railway CLI**
 ```bash
-# Desde tu proyecto
-git add .
-git commit -m "feat: Implementar reCAPTCHA con FastAPI para Railway"
-git push origin signup
+# Instalar Railway CLI
+npm install -g @railway/cli
+
+# Login
+railway login
+
+# Inicializar proyecto
+railway init
+
+# Desplegar
+railway up
 ```
 
-### 2. **Crear proyecto en Railway**
-1. Ve a [railway.app](https://railway.app)
-2. Haz clic en **"Start a New Project"**
-3. Selecciona **"Deploy from GitHub repo"**
-4. Autoriza Railway para acceder a tu repositorio
-5. Selecciona tu repositorio `portafolio-sass`
-6. Selecciona la rama `signup`
+### 4. ⚙️ Configurar variables de entorno
+En el dashboard de Railway, ve a Variables y agrega:
 
-### 3. **Configuración automática**
-Railway detectará automáticamente:
-- ✅ Proyecto Python con FastAPI
-- ✅ Archivo `requirements.txt`
-- ✅ Comando de inicio desde `Procfile`
-- ✅ Puerto dinámico desde variable `$PORT`
+```
+RECAPTCHA_SECRET_KEY=tu_clave_secreta_recaptcha
+```
 
-### 4. **Variables de entorno (opcional)**
-Si quieres personalizar algo:
-- `PORT` - Railway lo asigna automáticamente
-- `RECAPTCHA_SECRET_KEY` - Ya está en el código (puedes moverlo a variables de entorno)
+### 5. 🚀 Despliegue automático
+- Railway detectará el `Dockerfile`
+- Construirá la imagen automáticamente
+- Desplegará en una URL única
+- Asignará puerto automáticamente
 
-### 5. **Dominio personalizado**
-Railway te asignará un dominio como:
-- `https://tu-proyecto.up.railway.app`
-- Puedes configurar un dominio personalizado en la configuración
+### 6. 🔗 Dominio personalizado (opcional)
+1. En Railway dashboard > Settings
+2. Agregar dominio personalizado
+3. Configurar DNS según instrucciones
 
-## 🔧 Características configuradas para Railway
+## 📝 Características incluidas
 
-### ✅ **Backend FastAPI**
-- ✅ Puerto dinámico con `$PORT`
-- ✅ Host `0.0.0.0` para aceptar conexiones externas
-- ✅ Archivos estáticos servidos por FastAPI
-- ✅ CORS configurado para dominios de Railway
-- ✅ Endpoint de health check en `/health`
+### 🐳 Docker optimizado
+- Python 3.11 slim (imagen ligera)
+- Cache de dependencias optimizado
+- Usuario no-root para seguridad
+- Puerto dinámico para Railway
 
-### ✅ **Frontend automático**
-- ✅ Detección automática de entorno (local vs Railway)
-- ✅ URLs de API dinámicas
-- ✅ reCAPTCHA funcionando en producción
+### 🔒 Seguridad
+- Variables de entorno para secretos
+- CORS configurado para Railway
+- Timeouts configurados
+- Manejo de errores robusto
 
-### ✅ **Archivos estáticos**
-- ✅ CSS, JS e imágenes servidos correctamente
-- ✅ Rutas configuradas para todos los archivos
+### ⚡ Rendimiento
+- FastAPI con uvicorn
+- Archivos estáticos servidos directamente
+- Compresión automática
+- Health checks incluidos
 
-## 🌐 URLs disponibles después del despliegue
+## 🛠️ Comandos útiles
 
-Cuando Railway termine el despliegue, tendrás:
+### Desarrollo local con Docker
+```bash
+# Construir imagen
+docker build -t portfolio-william .
 
-- **🏠 Página principal**: `https://tu-dominio.railway.app/`
-- **📝 Formulario**: `https://tu-dominio.railway.app/sign_up.html`
-- **📚 API Docs**: `https://tu-dominio.railway.app/docs`
-- **💊 Health Check**: `https://tu-dominio.railway.app/health`
-- **🤖 reCAPTCHA API**: `https://tu-dominio.railway.app/validate-recaptcha`
+# Ejecutar contenedor
+docker run -p 8000:8000 portfolio-william
+```
 
-## 🧪 Probar después del despliegue
+### Railway CLI
+```bash
+# Ver logs
+railway logs
 
-1. **Abre** tu dominio de Railway
-2. **Completa** el formulario de registro
-3. **Resuelve** el reCAPTCHA
-4. **Verifica** que el botón se habilita
-5. **Envía** el formulario para confirmar que todo funciona
+# Conectar a servicio
+railway connect
 
-## 🔍 Verificar logs
+# Ver variables
+railway variables
 
-En Railway puedes ver los logs en tiempo real:
-1. Ve a tu proyecto en Railway
-2. Haz clic en la pestaña **"Deployments"**
-3. Selecciona el despliegue activo
-4. Ve la pestaña **"Logs"** para ver la salida del servidor
+# Redeploy
+railway up --detach
+```
 
-## 🛠️ Solución de problemas
+## 🔧 Solución de problemas
 
-### ❌ **Error: Build failed**
-- Verifica que `requirements.txt` tenga las versiones correctas
-- Revisa los logs de build en Railway
+### Puerto incorrecto
+- Railway asigna PORT automáticamente
+- No cambiar configuración de puerto
 
-### ❌ **Error: Application failed to respond**
-- Verifica que el puerto esté configurado correctamente (`$PORT`)
-- Revisa que el comando de inicio sea correcto en `Procfile`
+### Variables de entorno
+- Configurar RECAPTCHA_SECRET_KEY en Railway
+- No incluir claves en el código
 
-### ❌ **Error: reCAPTCHA no funciona**
-- Asegúrate de que la Site Key sea correcta
-- Verifica que el dominio esté autorizado en Google reCAPTCHA Console
+### Archivos estáticos
+- Verificar rutas en HTML (`/css/`, `/js/`)
+- Archivos servidos desde FastAPI
 
-### ❌ **Error: CORS**
-- Verifica que el dominio de Railway esté incluido en `allow_origins`
-- Railway asigna dominios que cambian, usa patrones como `"*.railway.app"`
+### CORS errors
+- Dominios de Railway ya incluidos
+- Agregar dominios personalizados si es necesario
 
-## 📊 Monitoreo
+## 📞 Soporte
+- Documentación Railway: [docs.railway.app](https://docs.railway.app)
+- GitHub Issues del proyecto
+- Email: williamandres1603@gmail.com
 
-Railway proporciona:
-- 📈 **Métricas**: CPU, memoria, red
-- 📝 **Logs**: En tiempo real
-- ⚡ **Uptime**: Disponibilidad del servicio
-- 🔄 **Auto-deploy**: Despliegue automático en cada push
-
-¡Tu proyecto estará listo para producción! 🎉
+---
+✨ **¡Tu portfolio estará en línea en minutos!** ✨

@@ -1,0 +1,44 @@
+# 🌐 Production Dockerfile
+# Versión optimizada para producción en Railway
+
+FROM python:3.11-slim as builder
+
+# 🔧 Instalar dependencias de build
+RUN apt-get update && apt-get install -y \
+    gcc \
+    && rm -rf /var/lib/apt/lists/*
+
+# 📋 Instalar dependencias
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements.txt
+
+# 🚀 Imagen de producción
+FROM python:3.11-slim
+
+# 📦 Variables de entorno de producción
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/home/appuser/.local/bin:${PATH}"
+
+# 👤 Crear usuario
+RUN useradd --create-home --shell /bin/bash appuser
+
+# 📁 Configurar directorio
+WORKDIR /app
+
+# 📦 Instalar wheels precompilados
+COPY --from=builder /wheels /wheels
+RUN pip install --no-cache --find-links /wheels /wheels/* \
+    && rm -rf /wheels
+
+# 📁 Copiar aplicación
+COPY --chown=appuser:appuser . .
+
+# 👤 Cambiar a usuario no-root
+USER appuser
+
+# 🌐 Exponer puerto
+EXPOSE 8000
+
+# 🚀 Comando de inicio
+CMD ["python", "backend.py"]
