@@ -1,0 +1,34 @@
+# Archivos de Docker
+Dockerfile*
+.dockerignore
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de desarrollo
+.vscode/
+.idea/
+*.log
+
+# Archivos temporales
+temp/
+tmp/
+
+# Variables de entorno (si las hay)
+.env
+.env.local
+.env.production
+
+# Archivos de backup
+*.bak
+*.swp
+*.swo
+
+# Archivos de compilación SASS (mantener los .css generados)
+sass/
+*.scss
+
+# Git
+.git/
+.gitignore

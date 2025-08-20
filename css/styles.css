@@ -1,3 +1,131 @@
+.navbar {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(65, 51, 122, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+.navbar .nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+}
+.navbar .nav-logo a {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #41337A;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.navbar .nav-logo a:hover {
+  color: #6EA4BF;
+}
+.navbar .nav-menu {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 2rem;
+}
+.navbar .nav-menu .nav-item .nav-link {
+  color: #331E36;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.navbar .nav-menu .nav-item .nav-link:hover {
+  background-color: #ECFEE8;
+  color: #41337A;
+  transform: translateY(-2px);
+}
+.navbar .nav-menu .nav-item .nav-link.active {
+  background: linear-gradient(135deg, #41337A, #6EA4BF);
+  color: white;
+  box-shadow: 0 4px 15px rgba(65, 51, 122, 0.3);
+}
+.navbar .nav-menu .nav-item .nav-link.active:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(65, 51, 122, 0.4);
+}
+.navbar .nav-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+.navbar .nav-toggle .bar {
+  width: 25px;
+  height: 3px;
+  background-color: #41337A;
+  margin: 3px 0;
+  transition: 0.3s;
+  border-radius: 2px;
+}
+.navbar .nav-toggle:hover .bar {
+  background-color: #6EA4BF;
+}
+
+@media (max-width: 768px) {
+  .navbar .nav-container {
+    padding: 0 1rem;
+  }
+  .navbar .nav-menu {
+    position: fixed;
+    left: -100%;
+    top: 70px;
+    flex-direction: column;
+    background: white;
+    width: 100%;
+    text-align: center;
+    transition: 0.3s;
+    box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+    gap: 0;
+    padding: 2rem 0;
+  }
+  .navbar .nav-menu.active {
+    left: 0;
+  }
+  .navbar .nav-menu .nav-item {
+    margin: 0.5rem 0;
+  }
+  .navbar .nav-menu .nav-item .nav-link {
+    padding: 1rem 2rem;
+    display: block;
+    font-size: 1.1rem;
+    border-radius: 0;
+  }
+  .navbar .nav-menu .nav-item .nav-link:hover {
+    background-color: #ECFEE8;
+    transform: none;
+  }
+  .navbar .nav-menu .nav-item .nav-link.active {
+    background: linear-gradient(135deg, #41337A, #6EA4BF);
+    color: white;
+    margin: 0.5rem 1rem;
+    border-radius: 25px;
+  }
+  .navbar .nav-toggle {
+    display: flex;
+  }
+  .navbar .nav-toggle.active .bar:nth-child(2) {
+    opacity: 0;
+  }
+  .navbar .nav-toggle.active .bar:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+  }
+  .navbar .nav-toggle.active .bar:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+}
 #personal-info {
   background-color: #331E36;
   color: white;
@@ -124,6 +252,240 @@
   font-weight: 500;
 }
 
+.form-section {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-content h2 {
+  color: #41337A;
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  border-bottom: 3px solid #C2EFEB;
+  padding-bottom: 1rem;
+}
+
+.registration-form .form-group {
+  margin-bottom: 1.5rem;
+}
+.registration-form .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #331E36;
+  font-size: 1rem;
+}
+.registration-form .form-group input[type=text],
+.registration-form .form-group input[type=email],
+.registration-form .form-group input[type=password],
+.registration-form .form-group input[type=date],
+.registration-form .form-group input[type=tel] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background-color: #fafbfc;
+}
+.registration-form .form-group input[type=text]:focus,
+.registration-form .form-group input[type=email]:focus,
+.registration-form .form-group input[type=password]:focus,
+.registration-form .form-group input[type=date]:focus,
+.registration-form .form-group input[type=tel]:focus {
+  outline: none;
+  border-color: #6EA4BF;
+  background-color: white;
+  box-shadow: 0 0 0 3px rgba(110, 164, 191, 0.1);
+}
+.registration-form .form-group input[type=text].valid,
+.registration-form .form-group input[type=email].valid,
+.registration-form .form-group input[type=password].valid,
+.registration-form .form-group input[type=date].valid,
+.registration-form .form-group input[type=tel].valid {
+  border-color: #28a745;
+  background-color: #f8fff9;
+}
+.registration-form .form-group input[type=text].valid:focus,
+.registration-form .form-group input[type=email].valid:focus,
+.registration-form .form-group input[type=password].valid:focus,
+.registration-form .form-group input[type=date].valid:focus,
+.registration-form .form-group input[type=tel].valid:focus {
+  box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+.registration-form .form-group input[type=text].invalid,
+.registration-form .form-group input[type=email].invalid,
+.registration-form .form-group input[type=password].invalid,
+.registration-form .form-group input[type=date].invalid,
+.registration-form .form-group input[type=tel].invalid {
+  border-color: #dc3545;
+  background-color: #fff8f8;
+}
+.registration-form .form-group input[type=text].invalid:focus,
+.registration-form .form-group input[type=email].invalid:focus,
+.registration-form .form-group input[type=password].invalid:focus,
+.registration-form .form-group input[type=date].invalid:focus,
+.registration-form .form-group input[type=tel].invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+}
+.registration-form .form-group .form-hint {
+  display: block;
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+.registration-form .form-group .password-requirements {
+  display: block;
+  font-size: 0.875rem;
+  color: #41337A;
+  margin-top: 0.25rem;
+  padding: 0.5rem;
+  background-color: #ECFEE8;
+  border-radius: 4px;
+  border-left: 3px solid #C2EFEB;
+}
+.registration-form .form-group .error-message {
+  display: block;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+  min-height: 1.2rem;
+}
+.registration-form .form-group .error-message:empty {
+  margin-top: 0;
+  min-height: 0;
+}
+.registration-form .checkbox-group .checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  font-weight: normal;
+  margin-bottom: 0;
+}
+.registration-form .checkbox-group .checkbox-label input[type=checkbox] {
+  opacity: 0;
+  position: absolute;
+}
+.registration-form .checkbox-group .checkbox-label input[type=checkbox]:checked + .checkmark {
+  background-color: #6EA4BF;
+  border-color: #6EA4BF;
+}
+.registration-form .checkbox-group .checkbox-label input[type=checkbox]:checked + .checkmark::after {
+  display: block;
+}
+.registration-form .checkbox-group .checkbox-label input[type=checkbox]:focus + .checkmark {
+  box-shadow: 0 0 0 3px rgba(110, 164, 191, 0.2);
+}
+.registration-form .checkbox-group .checkbox-label .checkmark {
+  height: 20px;
+  width: 20px;
+  background-color: white;
+  border: 2px solid #e1e5e9;
+  border-radius: 4px;
+  margin-right: 0.75rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.registration-form .checkbox-group .checkbox-label .checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.registration-form .checkbox-group .checkbox-label a {
+  color: #41337A;
+  text-decoration: none;
+}
+.registration-form .checkbox-group .checkbox-label a:hover {
+  text-decoration: underline;
+}
+.registration-form .submit-btn {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, #41337A, #6EA4BF);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.registration-form .submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #331E36, #41337A);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(51, 30, 54, 0.3);
+}
+.registration-form .submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.registration-form .submit-btn:disabled {
+  background: #6c757d;
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+.success-message {
+  text-align: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #d4edda, #c3e6cb);
+  border: 2px solid #28a745;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+.success-message h3 {
+  color: #155724;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+.success-message p {
+  color: #155724;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .form-section {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  .form-content h2 {
+    font-size: 1.5rem;
+  }
+  .registration-form .form-group {
+    margin-bottom: 1.25rem;
+  }
+  .registration-form .form-group input[type=text],
+  .registration-form .form-group input[type=email],
+  .registration-form .form-group input[type=password],
+  .registration-form .form-group input[type=date],
+  .registration-form .form-group input[type=tel] {
+    padding: 0.625rem;
+  }
+  .registration-form .submit-btn {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+}
 * {
   margin: 0;
   padding: 0;

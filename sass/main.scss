@@ -1,7 +1,9 @@
 @use './variables';
+@use './navbar';
 @use './personal';
 @use './skills';
 @use './teaser';
+@use './form';
 
 * {
   margin: 0;

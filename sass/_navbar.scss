@@ -1,0 +1,162 @@
+// 🧭 Estilos para la navegación
+@use './variables';
+
+.navbar {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(65, 51, 122, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
+    .nav-container {
+        max-width: variables.$container-max-width;
+        margin: 0 auto;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 70px;
+    }
+    
+    .nav-logo {
+        a {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: variables.$color-tekhelet;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            
+            &:hover {
+                color: variables.$color-blue;
+            }
+        }
+    }
+    
+    .nav-menu {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 2rem;
+        
+        .nav-item {
+            .nav-link {
+                color: variables.$color-dark-purple;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 25px;
+                transition: all 0.3s ease;
+                position: relative;
+                
+                &:hover {
+                    background-color: variables.$color-honeydew;
+                    color: variables.$color-tekhelet;
+                    transform: translateY(-2px);
+                }
+                
+                &.active {
+                    background: linear-gradient(135deg, variables.$color-tekhelet, variables.$color-blue);
+                    color: white;
+                    box-shadow: 0 4px 15px rgba(65, 51, 122, 0.3);
+                    
+                    &:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 6px 20px rgba(65, 51, 122, 0.4);
+                    }
+                }
+            }
+        }
+    }
+    
+    // Menú hamburguesa para móviles
+    .nav-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        padding: 0.5rem;
+        
+        .bar {
+            width: 25px;
+            height: 3px;
+            background-color: variables.$color-tekhelet;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+        
+        &:hover .bar {
+            background-color: variables.$color-blue;
+        }
+    }
+}
+
+// Responsiveness para móviles
+@media (max-width: 768px) {
+    .navbar {
+        .nav-container {
+            padding: 0 1rem;
+        }
+        
+        .nav-menu {
+            position: fixed;
+            left: -100%;
+            top: 70px;
+            flex-direction: column;
+            background: white;
+            width: 100%;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 10px 27px rgba(0, 0, 0, 0.05);
+            gap: 0;
+            padding: 2rem 0;
+            
+            &.active {
+                left: 0;
+            }
+            
+            .nav-item {
+                margin: 0.5rem 0;
+                
+                .nav-link {
+                    padding: 1rem 2rem;
+                    display: block;
+                    font-size: 1.1rem;
+                    border-radius: 0;
+                    
+                    &:hover {
+                        background-color: variables.$color-honeydew;
+                        transform: none;
+                    }
+                    
+                    &.active {
+                        background: linear-gradient(135deg, variables.$color-tekhelet, variables.$color-blue);
+                        color: white;
+                        margin: 0.5rem 1rem;
+                        border-radius: 25px;
+                    }
+                }
+            }
+        }
+        
+        .nav-toggle {
+            display: flex;
+            
+            &.active {
+                .bar:nth-child(2) {
+                    opacity: 0;
+                }
+                
+                .bar:nth-child(1) {
+                    transform: translateY(8px) rotate(45deg);
+                }
+                
+                .bar:nth-child(3) {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+        }
+    }
+}

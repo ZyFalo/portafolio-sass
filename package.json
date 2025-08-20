@@ -1,0 +1,32 @@
+{
+  "name": "portfolio-william-pena",
+  "version": "1.0.0",
+  "description": "Portfolio personal de William Andrés Peña Vargas - Desarrollador Web",
+  "main": "index.html",
+  "scripts": {
+    "start": "nginx -g 'daemon off;'",
+    "dev": "live-server --port=3000",
+    "build": "echo 'Build completed - Static files ready'",
+    "sass": "sass sass/main.scss css/styles.css --watch"
+  },
+  "keywords": [
+    "portfolio",
+    "html",
+    "css",
+    "sass",
+    "javascript",
+    "responsive",
+    "web-developer"
+  ],
+  "author": "William Andrés Peña Vargas <williamandres1603@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ZyFalo/portafolio-sass.git"
+  },
+  "homepage": "https://github.com/ZyFalo/portafolio-sass#readme",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "sass": "^1.69.0"
+  }
+}
