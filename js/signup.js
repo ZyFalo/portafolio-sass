@@ -72,10 +72,42 @@ class FormValidator {
             birthDate: false,       // ❌ Inválido hasta que sea mayor de 18 años
             mobile: false,          // ❌ Inválido hasta que sea formato colombiano correcto
             phone: true,            // ✅ Válido por defecto (campo OPCIONAL)
-            terms: false            // ❌ Inválido hasta que acepte términos y condiciones
+            terms: false,           // ❌ Inválido hasta que acepte términos y condiciones
+            recaptcha: false        // ❌ Inválido hasta que se complete el reCAPTCHA
+        };
+
+        // 🤖 Configuración de reCAPTCHA
+        this.recaptchaConfig = {
+            siteKey: '6LcyBKwrAAAAAGXRRbcUHehkkr5lYetSB4F8V8s7',
+            backendUrl: this.getBackendUrl(),
+            isLoaded: false,
+            widget: null
         };
         
         this.init();
+    }
+
+    /**
+     * 🌐 DETECTA LA URL DEL BACKEND AUTOMÁTICAMENTE
+     * 
+     * LÓGICA:
+     * - En desarrollo local: usa localhost:8000
+     * - En Railway: usa la URL del dominio actual + /validate-recaptcha
+     * - Detecta automáticamente el entorno basándose en el hostname
+     */
+    getBackendUrl() {
+        const hostname = window.location.hostname;
+        
+        // 🏠 Desarrollo local
+        if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname.includes('192.168')) {
+            return 'http://localhost:8000/validate-recaptcha';
+        }
+        
+        // ☁️ Producción (Railway o cualquier otro hosting)
+        // Usa el mismo dominio pero con el endpoint de la API
+        const protocol = window.location.protocol; // http: o https:
+        const host = window.location.host; // dominio + puerto si existe
+        return `${protocol}//${host}/validate-recaptcha`;
     }
     
     /**
@@ -83,6 +115,7 @@ class FormValidator {
      */
     init() {
         this.attachEventListeners();
+        this.loadRecaptcha();
         this.updateSubmitButton();
     }
     
@@ -146,6 +179,178 @@ class FormValidator {
         
         // 📤 FORMULARIO: Interceptar envío para validación final
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+    }
+
+    /**
+     * 🤖 CARGA E INICIALIZA RECAPTCHA DE GOOGLE
+     * 
+     * PROCESO:
+     * 1. Verifica si el script de Google ya está cargado
+     * 2. Si no está cargado, lo carga dinámicamente
+     * 3. Inicializa el widget de reCAPTCHA cuando esté listo
+     * 4. Configura el callback para cuando se complete
+     */
+    loadRecaptcha() {
+        // 🔍 Verificar si ya existe el script de Google reCAPTCHA
+        if (!document.querySelector('script[src*="recaptcha"]')) {
+            // 📜 Crear y cargar script de Google reCAPTCHA
+            const script = document.createElement('script');
+            script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+
+            // 🌐 Definir callback global para cuando reCAPTCHA esté listo
+            window.onRecaptchaLoad = () => {
+                this.initRecaptchaWidget();
+            };
+        } else if (window.grecaptcha && window.grecaptcha.render) {
+            // ✅ Script ya cargado, inicializar widget directamente
+            this.initRecaptchaWidget();
+        }
+    }
+
+    /**
+     * 🎯 INICIALIZA EL WIDGET DE RECAPTCHA
+     * 
+     * CONFIGURACIÓN:
+     * - Site Key: Clave pública proporcionada por Google
+     * - Callback: Función que se ejecuta cuando se completa exitosamente
+     * - Expired-callback: Función que se ejecuta cuando expira
+     * - Error-callback: Función que se ejecuta si hay errores
+     */
+    initRecaptchaWidget() {
+        try {
+            const recaptchaContainer = document.getElementById('recaptcha-container');
+            
+            if (!recaptchaContainer) {
+                console.error('❌ No se encontró el contenedor de reCAPTCHA');
+                return;
+            }
+
+            // 🏗️ Renderizar widget de reCAPTCHA
+            this.recaptchaConfig.widget = window.grecaptcha.render(recaptchaContainer, {
+                sitekey: this.recaptchaConfig.siteKey,
+                callback: (token) => this.onRecaptchaSuccess(token),
+                'expired-callback': () => this.onRecaptchaExpired(),
+                'error-callback': () => this.onRecaptchaError()
+            });
+
+            this.recaptchaConfig.isLoaded = true;
+            console.log('✅ reCAPTCHA inicializado correctamente');
+            
+        } catch (error) {
+            console.error('❌ Error al inicializar reCAPTCHA:', error);
+            this.onRecaptchaError();
+        }
+    }
+
+    /**
+     * ✅ CALLBACK CUANDO RECAPTCHA SE COMPLETA EXITOSAMENTE
+     * 
+     * PROCESO:
+     * 1. Recibe el token de Google
+     * 2. Envía el token al backend para validación
+     * 3. Si el backend confirma validez, habilita el botón
+     * 4. Si hay error, muestra mensaje y resetea reCAPTCHA
+     * 
+     * @param {string} token - Token generado por Google reCAPTCHA
+     */
+    async onRecaptchaSuccess(token) {
+        console.log('🤖 reCAPTCHA completado, verificando con el servidor...');
+        
+        try {
+            // 🔄 Mostrar estado de carga
+            this.showRecaptchaStatus('Verificando...', 'loading');
+
+            // 📤 Enviar token al backend para validación
+            const response = await fetch(this.recaptchaConfig.backendUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    recaptcha_token: token
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                // ✅ reCAPTCHA válido
+                this.fieldValidation.recaptcha = true;
+                this.showRecaptchaStatus('✅ Verificado correctamente', 'success');
+                console.log('✅ reCAPTCHA verificado por el servidor');
+                
+            } else {
+                // ❌ reCAPTCHA inválido
+                this.fieldValidation.recaptcha = false;
+                this.showRecaptchaStatus('❌ Verificación falló', 'error');
+                console.error('❌ reCAPTCHA rechazado por el servidor:', result.message);
+                this.resetRecaptcha();
+            }
+
+        } catch (error) {
+            // 💥 Error de conexión o servidor
+            console.error('❌ Error al verificar reCAPTCHA:', error);
+            this.fieldValidation.recaptcha = false;
+            this.showRecaptchaStatus('❌ Error de conexión', 'error');
+            this.resetRecaptcha();
+        }
+
+        // 🔄 Actualizar estado del botón de envío
+        this.updateSubmitButton();
+    }
+
+    /**
+     * ⏰ CALLBACK CUANDO RECAPTCHA EXPIRA
+     */
+    onRecaptchaExpired() {
+        console.log('⏰ reCAPTCHA expirado');
+        this.fieldValidation.recaptcha = false;
+        this.showRecaptchaStatus('⏰ reCAPTCHA expirado, por favor vuelve a verificar', 'warning');
+        this.updateSubmitButton();
+    }
+
+    /**
+     * ❌ CALLBACK CUANDO HAY ERROR EN RECAPTCHA
+     */
+    onRecaptchaError() {
+        console.error('❌ Error en reCAPTCHA');
+        this.fieldValidation.recaptcha = false;
+        this.showRecaptchaStatus('❌ Error al cargar reCAPTCHA', 'error');
+        this.updateSubmitButton();
+    }
+
+    /**
+     * 📢 MUESTRA ESTADO DEL RECAPTCHA AL USUARIO
+     * 
+     * @param {string} message - Mensaje a mostrar
+     * @param {string} type - Tipo: 'loading', 'success', 'error', 'warning'
+     */
+    showRecaptchaStatus(message, type) {
+        const statusElement = document.getElementById('recaptcha-status');
+        if (statusElement) {
+            statusElement.textContent = message;
+            statusElement.className = `recaptcha-status ${type}`;
+            statusElement.style.display = 'block';
+
+            // 🚀 Auto-ocultar mensajes de éxito después de 3 segundos
+            if (type === 'success') {
+                setTimeout(() => {
+                    statusElement.style.display = 'none';
+                }, 3000);
+            }
+        }
+    }
+
+    /**
+     * 🔄 RESETEA EL WIDGET DE RECAPTCHA
+     */
+    resetRecaptcha() {
+        if (this.recaptchaConfig.isLoaded && window.grecaptcha && this.recaptchaConfig.widget !== null) {
+            window.grecaptcha.reset(this.recaptchaConfig.widget);
+        }
     }
     
     /**
@@ -541,17 +746,26 @@ class FormValidator {
         this.validateMobile();
         this.validatePhone();
         this.validateTerms();
+        // 🤖 reCAPTCHA se valida automáticamente cuando se completa
     }
     
     /**
      * 🎯 Enfoca el primer campo inválido
      */
     focusFirstInvalidField() {
-        const fields = ['fullName', 'email', 'password', 'confirmPassword', 'birthDate', 'mobile', 'phone', 'terms'];
+        const fields = ['fullName', 'email', 'password', 'confirmPassword', 'birthDate', 'mobile', 'phone', 'terms', 'recaptcha'];
         
         for (const fieldName of fields) {
             if (!this.fieldValidation[fieldName]) {
-                document.getElementById(fieldName).focus();
+                if (fieldName === 'recaptcha') {
+                    // 🤖 Para reCAPTCHA, hacer scroll al contenedor
+                    const recaptchaContainer = document.getElementById('recaptcha-container');
+                    if (recaptchaContainer) {
+                        recaptchaContainer.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                } else {
+                    document.getElementById(fieldName).focus();
+                }
                 break;
             }
         }
@@ -628,8 +842,16 @@ class FormValidator {
             birthDate: false,
             mobile: false,
             phone: true, // Opcional
-            terms: false
+            terms: false,
+            recaptcha: false
         };
+        
+        // 🤖 Resetear reCAPTCHA
+        this.resetRecaptcha();
+        const statusElement = document.getElementById('recaptcha-status');
+        if (statusElement) {
+            statusElement.style.display = 'none';
+        }
         
         this.updateSubmitButton();
         document.getElementById('fullName').focus();
