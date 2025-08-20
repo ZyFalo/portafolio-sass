@@ -10,6 +10,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+node_modules/
 
 # Archivos temporales
 temp/
@@ -26,9 +27,12 @@ tmp/
 *.swo
 
 # Archivos de compilación SASS (mantener los .css generados)
-sass/
-*.scss
+# sass/
+# *.scss
 
 # Git
 .git/
 .gitignore
+
+# Documentación de despliegue
+DEPLOY.md
