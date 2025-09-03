@@ -66,7 +66,12 @@ async def root():
 @app.get("/health")
 async def health_check():
     """💚 Health check para Railway"""
-    return {"status": "healthy", "service": "recaptcha-validator"}
+    return {
+        "status": "healthy", 
+        "service": "recaptcha-validator",
+        "port": os.environ.get("PORT", "8000"),
+        "environment": "railway" if "RAILWAY_ENVIRONMENT" in os.environ else "local"
+    }
 
 @app.get("/sign_up.html")
 async def signup_page():
@@ -192,10 +197,11 @@ if __name__ == "__main__":
     
     print(f"🚀 Iniciando servidor reCAPTCHA en puerto {port}")
     print(f"🌍 Entorno: {'Railway' if 'RAILWAY_ENVIRONMENT' in os.environ else 'Local'}")
+    print(f"🔧 Variables de entorno PORT: {os.environ.get('PORT', 'No definida')}")
     
     # 🏃‍♂️ Ejecutar servidor optimizado para Railway
     uvicorn.run(
-        "backend:app",
+        app,  # Pasar directamente la instancia app
         host="0.0.0.0",
         port=port,
         reload=False,  # Sin reload en producción
