@@ -716,20 +716,31 @@ class FormValidator {
     }
     
     /**
-     * 📤 Maneja el envío del formulario
+     * 📤 MANEJA EL ENVÍO DEL FORMULARIO
+     * 
+     * FLUJO DE RESPONSABILIDADES:
+     * 1. Previene envío por defecto del navegador
+     * 2. Re-valida todos los campos (incluyendo reCAPTCHA)
+     * 3. Si TODO es válido: Muestra modal de éxito + recarga página
+     * 4. Si hay errores: Enfoca primer campo inválido
+     * 
+     * IMPORTANTE: Este formulario NO envía datos a ningún servidor.
+     * Solo valida localmente y muestra confirmación de éxito.
      */
     handleSubmit(event) {
         event.preventDefault();
         
-        // Validar todos los campos una vez más
+        // 🔄 Validar todos los campos una vez más
         this.validateAllFields();
         
-        // Verificar si todos los campos son válidos
+        // 🔍 Verificar si todos los campos son válidos (incluyendo reCAPTCHA)
         const allValid = Object.values(this.fieldValidation).every(isValid => isValid);
         
         if (allValid) {
+            // ✅ Todo válido: Mostrar modal y recargar
             this.showSuccessMessage();
         } else {
+            // ❌ Hay errores: Enfocar primer campo inválido
             this.focusFirstInvalidField();
         }
     }
@@ -772,42 +783,56 @@ class FormValidator {
     }
     
     /**
-     * 🎉 Muestra mensaje de éxito
+     * 🎉 MUESTRA MODAL DE ÉXITO Y MANEJA EL FLUJO FINAL
+     * 
+     * COMPORTAMIENTO REQUERIDO:
+     * 1. Muestra un modal/alert de "Registro Exitoso"
+     * 2. Al hacer click en OK, recarga la página
+     * 3. No envía datos a ningún servidor (simulación únicamente)
      */
     showSuccessMessage() {
-        // Ocultar formulario y mostrar mensaje de éxito
-        this.form.style.display = 'none';
-        this.successMessage.style.display = 'block';
+        // 📊 Obtener datos del formulario para logs (solo simulación)
+        const formData = this.getFormData();
         
-        // Scroll hacia el mensaje de éxito
-        this.successMessage.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-        });
+        // 📝 Log de los datos simulados
+        console.log('✅ REGISTRO SIMULADO EXITOSO');
+        console.log('📋 Datos capturados:', formData);
+        console.log('🔒 reCAPTCHA: Validado correctamente');
+        console.log('⚠️ Nota: Estos datos NO se envían a ningún servidor');
         
-        // Simulación: aquí irían los datos al servidor
-        console.log('📤 Datos del formulario (simulación):', this.getFormData());
+        // 🎉 Mostrar modal de éxito
+        const mensaje = `🎉 ¡Registro Exitoso!
         
-        // Opcional: reiniciar formulario después de 5 segundos
-        setTimeout(() => {
-            if (confirm('¿Deseas registrar otro usuario?')) {
-                this.resetForm();
-            }
-        }, 5000);
+✅ Todos los datos han sido validados correctamente
+🔒 reCAPTCHA verificado con Google
+📝 Usuario: ${formData.fullName}
+📧 Email: ${formData.email}
+
+Presiona OK para continuar.`;
+
+        // 🎯 Mostrar alert y recargar página al confirmar
+        alert(mensaje);
+        
+        // 🔄 Recargar la página después del modal
+        window.location.reload();
     }
     
     /**
-     * 📊 Obtiene los datos del formulario
+     * 📊 OBTIENE LOS DATOS DEL FORMULARIO PARA SIMULACIÓN
+     * 
+     * Nota: Esta función solo captura datos para mostrar en logs.
+     * En un sistema real, la contraseña se hashearía antes del envío.
      */
     getFormData() {
         return {
             fullName: document.getElementById('fullName').value.trim(),
             email: document.getElementById('email').value.trim(),
-            password: document.getElementById('password').value, // En producción, esto se debe hashear
+            password: '[OCULTA POR SEGURIDAD]', // No mostrar contraseña en logs
             birthDate: document.getElementById('birthDate').value,
             mobile: document.getElementById('mobile').value.replace(/\s/g, ''),
-            phone: document.getElementById('phone').value.replace(/\s/g, ''),
+            phone: document.getElementById('phone').value.replace(/\s/g, '') || 'No proporcionado',
             termsAccepted: document.getElementById('terms').checked,
+            recaptchaValidated: this.fieldValidation.recaptcha,
             registrationDate: new Date().toISOString()
         };
     }
@@ -894,17 +919,29 @@ document.addEventListener('DOMContentLoaded', () => {
        - Se actualiza automáticamente después de cada validación
        - Proporciona feedback visual al usuario
     
-    5. 📤 ENVÍO DEL FORMULARIO:
+    5. 📤 ENVÍO SIMULADO DEL FORMULARIO:
        - Se previene el envío por defecto del navegador
-       - Se re-validan todos los campos por seguridad
-       - Si todo es válido: se muestra mensaje de éxito
+       - Se re-validan todos los campos por seguridad (incluyendo reCAPTCHA)
+       - Si todo es válido: se muestra modal de "Registro Exitoso" + recarga
        - Si hay errores: se enfoca el primer campo inválido
+       - NO se envían datos a ningún servidor (solo simulación)
     
-    🛡️ SEGURIDAD IMPLEMENTADA:
-    - Validación en frontend (UX) + validación en backend requerida
-    - Expresiones regulares específicas para cada tipo de dato
-    - Sanitización de inputs (trim, eliminación de espacios)
-    - Validación de edad precisa con cálculos de fecha
-    - Formatos específicos para números colombianos
+    🛡️ SEGURIDAD Y VALIDACIONES IMPLEMENTADAS:
+    - ✅ Validación dual: Frontend (UX) + Backend reCAPTCHA 
+    - ✅ Expresiones regulares específicas para cada tipo de dato
+    - ✅ Sanitización de inputs (trim, eliminación de espacios)
+    - ✅ Validación de edad precisa con cálculos de fecha
+    - ✅ Formatos específicos para números colombianos
+    - ✅ reCAPTCHA validado con Google antes de permitir envío
+    - ✅ Contraseña oculta en logs por seguridad
+    
+    🎯 FLUJO DE reCAPTCHA:
+    1. Frontend carga widget de Google reCAPTCHA
+    2. Usuario completa el challenge
+    3. Google envía token al frontend
+    4. Frontend envía token al backend (/validate-recaptcha)
+    5. Backend valida token con Google API
+    6. Backend responde éxito/error al frontend
+    7. Solo si reCAPTCHA es válido, se permite envío del formulario
     `);
 });

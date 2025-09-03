@@ -1,10 +1,8 @@
 """
-🚀 Backend FastAPI para validació# 🔑 Configuración de reCAPTCHA para Railway
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
-RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"e r# 🔑 Configuración de reCAPTCHA
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
-RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"PTCHA
-Autor: Sistema de validación
+🚀 Backend FastAPI para validación de reCAPTCHA
+Responsabilidad única: Validar tokens de Google reCAPTCHA
+
+Autor: William Peña
 Fecha: Agosto 2025
 """
 
@@ -38,8 +36,8 @@ app.mount("/css", StaticFiles(directory="css"), name="css")
 app.mount("/js", StaticFiles(directory="js"), name="js")
 app.mount("/sass", StaticFiles(directory="sass"), name="sass")
 
-# �🔑 Configuración de reCAPTCHA
-RECAPTCHA_SECRET_KEY = "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj"
+# 🔑 Configuración de reCAPTCHA
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
 RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 # 📋 Modelo de datos para la petición
@@ -56,13 +54,13 @@ class RecaptchaResponse(BaseModel):
 
 @app.get("/")
 async def root():
-    """🏠 Página principal - Redirige al formulario de registro"""
-    return FileResponse('sign_up.html')
+    """🏠 Página principal"""
+    return FileResponse('index.html')
 
 @app.get("/health")
 async def health_check():
     """💚 Health check para Railway"""
-    return {"status": "healthy", "service": "portfolio-api"}
+    return {"status": "healthy", "service": "recaptcha-validator"}
 
 @app.get("/sign_up.html")
 async def signup_page():
@@ -73,23 +71,6 @@ async def signup_page():
 async def index_page():
     """🏠 Página de inicio"""
     return FileResponse('index.html')
-
-@app.get("/api")
-async def api_info():
-    """📚 Información de la API"""
-    return {
-        "message": "API de Validación reCAPTCHA",
-        "status": "activo",
-        "endpoints": {
-            "validate_recaptcha": "/validate-recaptcha [POST]",
-            "health": "/health [GET]"
-        }
-    }
-
-@app.get("/health")
-async def health_check():
-    """💊 Endpoint de salud del servicio"""
-    return {"status": "healthy", "service": "recaptcha-validator"}
 
 @app.post("/validate-recaptcha", response_model=RecaptchaResponse)
 async def validate_recaptcha(request: RecaptchaRequest) -> RecaptchaResponse:
@@ -185,15 +166,7 @@ async def validate_recaptcha(request: RecaptchaRequest) -> RecaptchaResponse:
             detail=f"Error interno del servidor: {str(e)}"
         )
 
-# 🎯 Endpoint adicional para testing
-@app.post("/test-recaptcha")
-async def test_recaptcha():
-    """🧪 Endpoint de prueba para verificar que el servicio funciona"""
-    return {
-        "message": "Servicio reCAPTCHA funcionando correctamente",
-        "test_token": "Use un token real de reCAPTCHA para probar",
-        "endpoint": "/validate-recaptcha"
-    }
+# 🎯 Endpoint principal de validación reCAPTCHA completado
 
 if __name__ == "__main__":
     import uvicorn
@@ -201,7 +174,7 @@ if __name__ == "__main__":
     # 🌐 Puerto de Railway (asignado dinámicamente)
     port = int(os.environ.get("PORT", 8000))
     
-    print(f"🚀 Iniciando en puerto {port}")
+    print(f"🚀 Iniciando servidor reCAPTCHA en puerto {port}")
     
     # 🏃‍♂️ Ejecutar servidor optimizado para Railway
     uvicorn.run(
