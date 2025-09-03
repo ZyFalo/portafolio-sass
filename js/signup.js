@@ -78,7 +78,7 @@ class FormValidator {
 
         // 🤖 Configuración de reCAPTCHA
         this.recaptchaConfig = {
-            siteKey: '6LcyBKwrAAAAAGXRRbcUHehkkr5lYetSB4F8V8s7',
+            siteKey: '6LeWRbwrAAAAAKNZJEJaDgjB9MuWQFAmpmO712Xv',
             backendUrl: this.getBackendUrl(),
             isLoaded: false,
             widget: null

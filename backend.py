@@ -1,5 +1,10 @@
 """
-🚀 Backend FastAPI para validación de reCAPTCHA
+🚀 Backend FastAPI para vali# 📁 Servir archivos estáticos (CSS, JS, imágenes)
+app.mount("/css", StaticFiles(directory="css"), name="css")
+app.mount("/js", StaticFiles(directory="js"), name="js")
+app.mount("/sass", StaticFiles(directory="sass"), name="sass")
+app.mount("/images", StaticFiles(directory="images"), name="images")
+app.mount("/images", StaticFiles(directory="images"), name="images")ón de reCAPTCHA
 Responsabilidad única: Validar tokens de Google reCAPTCHA
 
 Autor: William Peña
@@ -31,13 +36,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# � Servir archivos estáticos (CSS, JS, imágenes)
+# 📁 Servir archivos estáticos (CSS, JS, imágenes)
 app.mount("/css", StaticFiles(directory="css"), name="css")
 app.mount("/js", StaticFiles(directory="js"), name="js")
 app.mount("/sass", StaticFiles(directory="sass"), name="sass")
+app.mount("/images", StaticFiles(directory="images"), name="images")
 
 # 🔑 Configuración de reCAPTCHA
-RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LcyBKwrAAAAAN5VbS1ONFxLexh1-PzTm24RNmKj")
+RECAPTCHA_SECRET_KEY = os.environ.get("RECAPTCHA_SECRET_KEY", "6LeWRbwrAAAAAG9boVQpEj2Vgv7gE5FYGf5iqnxj")
 RECAPTCHA_VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify"
 
 # 📋 Modelo de datos para la petición
@@ -71,6 +77,16 @@ async def signup_page():
 async def index_page():
     """🏠 Página de inicio"""
     return FileResponse('index.html')
+
+@app.get("/IMAGEN.jpg")
+async def profile_image():
+    """🖼️ Imagen de perfil"""
+    return FileResponse('IMAGEN.jpg')
+
+@app.get("/favicon.svg")
+async def favicon():
+    """🔗 Favicon"""
+    return FileResponse('favicon.svg')
 
 @app.post("/validate-recaptcha", response_model=RecaptchaResponse)
 async def validate_recaptcha(request: RecaptchaRequest) -> RecaptchaResponse:
@@ -175,13 +191,14 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
     
     print(f"🚀 Iniciando servidor reCAPTCHA en puerto {port}")
+    print(f"🌍 Entorno: {'Railway' if 'RAILWAY_ENVIRONMENT' in os.environ else 'Local'}")
     
     # 🏃‍♂️ Ejecutar servidor optimizado para Railway
     uvicorn.run(
         "backend:app",
         host="0.0.0.0",
         port=port,
-        reload=False,
+        reload=False,  # Sin reload en producción
         log_level="info",
         access_log=True
     )

@@ -48,5 +48,13 @@ Thumbs.db
 # Dependencies
 node_modules/
 
+# Docker
+.dockerignore
+docker-compose.override.yml
+.docker/
+
+# Railway
+.railway/
+
 # Railway
 .railway/
